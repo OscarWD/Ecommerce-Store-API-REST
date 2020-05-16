@@ -9,6 +9,7 @@ namespace EcommerceStoreAPI.Config
         public static IServiceCollection AddRegistration(this IServiceCollection services)
         {
             services.AddScoped<IProductsRepository, ProductsRepository>();
+            services.AddScoped<ICategoriesRepository, CategoriesRepository>();
             services.AddSwaggerGen(configuration => configuration.SwaggerDoc("v0.0.1", new OpenApiInfo{Title= "Ecommerce Store API REST", Version = "v0.0.1"}));
 
             return services;
