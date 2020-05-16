@@ -34,6 +34,9 @@ namespace EcommerceStoreAPI
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            ApplicationRegistration.AddRegistration(app);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
