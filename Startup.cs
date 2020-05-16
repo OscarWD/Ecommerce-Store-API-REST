@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EcommerceStoreAPI.Config;
 using EcommerceStoreAPI.Data.Contexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,6 +29,7 @@ namespace EcommerceStoreAPI
         {
             services.AddDbContext<EcommerceContext>(options => options.UseSqlServer(Configuration.GetConnectionString("EcommerceDataBase")));
             services.AddControllers();
+            ServicesRegistration.AddRegistration(services);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
