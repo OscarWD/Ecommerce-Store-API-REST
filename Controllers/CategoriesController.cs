@@ -8,21 +8,22 @@ namespace EcommerceStoreAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductsController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
-        private readonly IProductsRepository _repository;
-        public ProductsController(IProductsRepository repository)
+        private readonly ICategoriesRepository _repository;
+
+        public CategoriesController(ICategoriesRepository repository)
         {
             _repository = repository;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Products>> GetProducts()
+        public ActionResult<IEnumerable<Categories>> GetCategories()
         {
             try
             {
-                var products = _repository.GetProducts();
-                return Ok(products);
+                var categories = _repository.GetCategories();
+                return Ok(categories);
             }
             catch (Exception)
             {
@@ -31,11 +32,11 @@ namespace EcommerceStoreAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Products> GetProduct(int id)
+        public ActionResult<Categories> GetCategorieById(int id)
         {
             try
             {
-                var product = _repository.GetProductById(id);
+                var product = _repository.GetCategorieById(id);
                 if (product == null)
                     return NotFound();
 
@@ -48,13 +49,14 @@ namespace EcommerceStoreAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Products> AddProduct([FromBody] Products product)
+        public ActionResult<Categories> AddCategorie([FromBody] Categories categorie)
         {
             try
             {
-                _repository.CreateProduct(product);
+                _repository.CreateCategorie(categorie);
                 _repository.SaveChanges();
-                return CreatedAtAction(nameof(GetProduct), new Products { Id = product.Id }, product);
+
+                return CreatedAtAction(nameof(GetCategorieById), new Categories { Id = categorie.Id }, categorie);
             }
             catch (Exception)
             {
@@ -63,40 +65,40 @@ namespace EcommerceStoreAPI.Controllers
         }
 
         [HttpPut]
-        public ActionResult PutProduct(Products product)
+        public ActionResult PutCategorie(Categories categorie)
         {
             try
             {
-                var productEdit = _repository.GetProductById(product.Id);
-                if (productEdit == null)
+                var categorieEdit = _repository.GetCategorieById(categorie.Id);
+                if (categorieEdit == null)
                     return NotFound();
 
-                productEdit.Name = product.Name;
-                productEdit.Description = product.Description;
-                productEdit.UnitPrice = product.UnitPrice;
-                productEdit.BuyPrice = product.BuyPrice;
-                productEdit.Quantity = product.Quantity;
+                categorieEdit.Name = categorie.Name;
+                categorieEdit.Description = categorie.Description;
 
-                _repository.UpdateProduct(productEdit);
+                _repository.UpdateCategorie(categorieEdit);
                 _repository.SaveChanges();
+
                 return NoContent();
             }
-            catch
+            catch (Exception)
             {
                 return BadRequest();
             }
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteProduct(int id)
+        public ActionResult DeleteCategorie (int id)
         {
             try
             {
-                var productDelete = _repository.GetProductById(id);
-                if (productDelete == null)
+                var categorieDelete = _repository.GetCategorieById(id);
+                if (categorieDelete == null)
                     return NotFound();
-                _repository.DeleteProduct(productDelete);
+
+                _repository.DeleteCategorie(categorieDelete);
                 _repository.SaveChanges();
+
                 return NoContent();
             }
             catch (Exception)
