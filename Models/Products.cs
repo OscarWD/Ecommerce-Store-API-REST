@@ -11,5 +11,8 @@ namespace EcommerceStoreAPI.Models
         public decimal UnitPrice { get; set; }
         public decimal BuyPrice { get; set; }
         public int Quantity { get; set; }
+        public int SubCategorieId { get; set; }
+
+        public virtual SubCategorie SubCategorie { get; set; }
     }
 }

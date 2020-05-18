@@ -19,8 +19,8 @@ namespace EcommerceStoreAPI.Data.Contexts
         public virtual DbSet<Bills> Bills { get; set; }
         public virtual DbSet<BillsDetails> BillsDetails { get; set; }
         public virtual DbSet<Categories> Categories { get; set; }
-        public virtual DbSet<CategoriesProducts> CategoriesProducts { get; set; }
         public virtual DbSet<Products> Products { get; set; }
+        public virtual DbSet<SubCategorie> SubCategorie { get; set; }
         public virtual DbSet<Users> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -46,7 +46,8 @@ namespace EcommerceStoreAPI.Data.Contexts
                 entity.HasOne(d => d.Users)
                     .WithMany(p => p.Bills)
                     .HasForeignKey(d => d.UsersId)
-                    .HasConstraintName("FK__bills__users_id__145C0A3F");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__bills__users_id__1920BF5C");
             });
 
             modelBuilder.Entity<BillsDetails>(entity =>
@@ -68,12 +69,14 @@ namespace EcommerceStoreAPI.Data.Contexts
                 entity.HasOne(d => d.Bills)
                     .WithMany()
                     .HasForeignKey(d => d.BillsId)
-                    .HasConstraintName("FK__billsDeta__bills__182C9B23");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__billsDeta__bills__1DE57479");
 
                 entity.HasOne(d => d.Products)
                     .WithMany()
                     .HasForeignKey(d => d.ProductsId)
-                    .HasConstraintName("FK__billsDeta__produ__1920BF5C");
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__billsDeta__produ__1ED998B2");
             });
 
             modelBuilder.Entity<Categories>(entity =>
@@ -93,27 +96,6 @@ namespace EcommerceStoreAPI.Data.Contexts
                     .HasColumnName("name")
                     .HasMaxLength(100)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<CategoriesProducts>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToTable("categories_products");
-
-                entity.Property(e => e.CategoriesId).HasColumnName("categories_id");
-
-                entity.Property(e => e.ProductsId).HasColumnName("products_id");
-
-                entity.HasOne(d => d.Categories)
-                    .WithMany()
-                    .HasForeignKey(d => d.CategoriesId)
-                    .HasConstraintName("FK__categorie__categ__24927208");
-
-                entity.HasOne(d => d.Products)
-                    .WithMany()
-                    .HasForeignKey(d => d.ProductsId)
-                    .HasConstraintName("FK__categorie__produ__25869641");
             });
 
             modelBuilder.Entity<Products>(entity =>
@@ -142,9 +124,44 @@ namespace EcommerceStoreAPI.Data.Contexts
 
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 
+                entity.Property(e => e.SubCategorieId).HasColumnName("subCategorie_id");
+
                 entity.Property(e => e.UnitPrice)
                     .HasColumnName("unitPrice")
                     .HasColumnType("decimal(18, 0)");
+
+                entity.HasOne(d => d.SubCategorie)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.SubCategorieId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__products__subCat__1BFD2C07");
+            });
+
+            modelBuilder.Entity<SubCategorie>(entity =>
+            {
+                entity.ToTable("subCategorie");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CategoriesId).HasColumnName("categories_id");
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasColumnName("description")
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Categories)
+                    .WithMany(p => p.SubCategorie)
+                    .HasForeignKey(d => d.CategoriesId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__subCatego__categ__164452B1");
             });
 
             modelBuilder.Entity<Users>(entity =>
@@ -152,11 +169,11 @@ namespace EcommerceStoreAPI.Data.Contexts
                 entity.ToTable("users");
 
                 entity.HasIndex(e => e.Email)
-                    .HasName("UQ__users__AB6E6164178D0745")
+                    .HasName("UQ__users__AB6E6164D91B3E3F")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Phone)
-                    .HasName("UQ__users__B43B145F21824B2C")
+                    .HasName("UQ__users__B43B145FF63D405B")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");

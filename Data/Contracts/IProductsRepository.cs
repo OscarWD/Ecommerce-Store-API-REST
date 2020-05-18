@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using EcommerceStoreAPI.Models;
 
-namespace EcommerceStoreAPI.Data
+namespace EcommerceStoreAPI.Data.Contracts
 {
     public interface IProductsRepository
     {

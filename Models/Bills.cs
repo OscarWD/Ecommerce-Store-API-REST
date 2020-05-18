@@ -8,7 +8,7 @@ namespace EcommerceStoreAPI.Models
         public int Id { get; set; }
         public decimal Total { get; set; }
         public DateTime Date { get; set; }
-        public int? UsersId { get; set; }
+        public int UsersId { get; set; }
 
         public virtual Users Users { get; set; }
     }

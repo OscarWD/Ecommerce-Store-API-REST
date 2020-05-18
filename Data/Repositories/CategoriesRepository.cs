@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using EcommerceStoreAPI.Data.Contexts;
+using EcommerceStoreAPI.Data.Contracts;
 using EcommerceStoreAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace EcommerceStoreAPI.Data
+namespace EcommerceStoreAPI.Data.Repositories
 {
     public class CategoriesRepository : ICategoriesRepository
     {
